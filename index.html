@@ -207,7 +207,6 @@
             <div class="max-w-7xl mx-auto">
                 <!-- Hero Banner -->
                 <div class="relative h-[50vh] rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
-                    <!-- Updated Banner Image -->
                     <img src="https://i.ibb.co/ym76yhWG/image.png" 
                          class="absolute inset-0 w-full h-full object-cover opacity-60 animate-pulse-slow" 
                          alt="ASEAN Banner">
@@ -350,13 +349,23 @@
                         <h2 class="text-4xl font-serif font-bold text-white mb-2">Travel & Culture</h2>
                         <p class="text-gray-400 font-mono text-sm">EXPLORE THE DIVERSE LANDSCAPES OF SOUTHEAST ASIA</p>
                     </div>
-                    <div class="mt-4 md:mt-0 flex gap-2 overflow-x-auto pb-2 md:pb-0" id="tourism-nav">
-                        <!-- Country buttons injected via JS -->
-                    </div>
+                    <!-- Back Button (Hidden initially) -->
+                    <button id="tourism-back-btn" onclick="showTourismGrid()" class="hidden px-4 py-2 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-colors">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Map
+                    </button>
                 </header>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="tourism-gallery">
-                    <!-- Gallery Items Injected via JS -->
+                <!-- VIEW 1: Country Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="tourism-country-grid">
+                    <!-- Country Cards Injected JS -->
+                </div>
+
+                <!-- VIEW 2: Photo Gallery (Hidden initially) -->
+                <div class="hidden" id="tourism-gallery-view">
+                    <h3 id="gallery-country-title" class="text-3xl font-bold text-white mb-6">Country Name</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="tourism-gallery-content">
+                        <!-- Photos Injected JS -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -816,25 +825,20 @@
 
         // Tourism Data (High Quality Unsplash)
         const tourismData = {
-            "All": [
-                { img: "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b", title: "Bali, Indonesia", desc: "The Island of the Gods." },
-                { img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07", title: "Kuala Lumpur, Malaysia", desc: "The Petronas Towers." },
-                { img: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86", title: "El Nido, Philippines", desc: "Pristine beaches." },
-                { img: "https://images.unsplash.com/photo-1506318137071-a8bcbf6d943d", title: "Gardens by the Bay, Singapore", desc: "Futuristic nature park." },
-                { img: "https://images.unsplash.com/photo-1528181304800-259b08848526", title: "Bangkok, Thailand", desc: "The Grand Palace." },
-                { img: "https://images.unsplash.com/photo-1540611025311-01df3ce54629", title: "Angkor Wat, Cambodia", desc: "Ancient temple complex." }
-            ],
             "Indonesia": [
                 { img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4", title: "Bali Rice Terraces", desc: "Ubud's lush landscapes." },
                 { img: "https://images.unsplash.com/photo-1570784332176-1f72b3dd922b", title: "Borobudur", desc: "World's largest Buddhist temple." },
-                { img: "https://images.unsplash.com/photo-1577717903315-16d11e693b12", title: "Komodo Island", desc: "Home of the dragons." }
+                { img: "https://images.unsplash.com/photo-1577717903315-16d11e693b12", title: "Komodo Island", desc: "Home of the dragons." },
+                { img: "https://images.unsplash.com/photo-1596401057633-565652ca65a0", title: "Nusa Penida", desc: "Dramatic cliffs." }
             ],
             "Malaysia": [
+                { img: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07", title: "Petronas Towers", desc: "Kuala Lumpur skyline." },
                 { img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3", title: "Batu Caves", desc: "Limestone hill and caves." },
                 { img: "https://images.unsplash.com/photo-1505322101000-19457c432243", title: "Langkawi", desc: "Jewel of Kedah." },
                 { img: "https://images.unsplash.com/photo-1627384113972-f4c0392fe5aa", title: "Penang Street Art", desc: "George Town culture." }
             ],
             "Philippines": [
+                { img: "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86", title: "El Nido", desc: "Palawan's pristine lagoons." },
                 { img: "https://images.unsplash.com/photo-1534570122623-99e8378a9aa7", title: "Chocolate Hills", desc: "Bohol's natural wonder." },
                 { img: "https://images.unsplash.com/photo-1516125073169-9e3ec0e36815", title: "Boracay", desc: "White beach paradise." },
                 { img: "https://images.unsplash.com/photo-1544413660-299162874725", title: "Intramuros", desc: "Historic walled city." }
@@ -842,9 +846,11 @@
             "Singapore": [
                 { img: "https://images.unsplash.com/photo-1506318137071-a8bcbf6d943d", title: "Supertrees", desc: "Gardens by the Bay." },
                 { img: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd", title: "Marina Bay Sands", desc: "Iconic skyline." },
-                { img: "https://images.unsplash.com/photo-1555627699-31e40026f8d0", title: "Sentosa", desc: "Island resort." }
+                { img: "https://images.unsplash.com/photo-1555627699-31e40026f8d0", title: "Sentosa", desc: "Island resort." },
+                { img: "https://images.unsplash.com/photo-1505535162959-9bbcb4fe3bbc", title: "Merlion Park", desc: "City symbol." }
             ],
             "Thailand": [
+                { img: "https://images.unsplash.com/photo-1528181304800-259b08848526", title: "Bangkok", desc: "The Grand Palace." },
                 { img: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a", title: "Phi Phi Islands", desc: "Tropical paradise." },
                 { img: "https://images.unsplash.com/photo-1563492065599-3520f775eeed", title: "Chiang Mai", desc: "Northern temples." },
                 { img: "https://images.unsplash.com/photo-1508009603885-50cf7c579365", title: "Ayutthaya", desc: "Ancient capital." }
@@ -852,19 +858,23 @@
             "Vietnam": [
                 { img: "https://images.unsplash.com/photo-1528127269322-539801943592", title: "Ha Long Bay", desc: "Limestone karsts." },
                 { img: "https://images.unsplash.com/photo-1505051508004-cb7497f21b84", title: "Hoi An", desc: "Ancient lantern city." },
-                { img: "https://images.unsplash.com/photo-1557750255-c76072a7aad1", title: "Golden Bridge", desc: "Da Nang." }
+                { img: "https://images.unsplash.com/photo-1557750255-c76072a7aad1", title: "Golden Bridge", desc: "Da Nang." },
+                { img: "https://images.unsplash.com/photo-1583417319070-4a69db38a482", title: "Saigon", desc: "Modern metropolis." }
             ],
              "Laos": [
                 { img: "https://images.unsplash.com/photo-1558559437-05c080fc8513", title: "Luang Prabang", desc: "Royal capital." },
                 { img: "https://images.unsplash.com/photo-1540636284646-17e923838b55", title: "Vang Vieng", desc: "Limestone mountains." },
-                { img: "https://images.unsplash.com/photo-1528659424727-466d79a29883", title: "Kuang Si Falls", desc: "Turquoise waters." }
+                { img: "https://images.unsplash.com/photo-1528659424727-466d79a29883", title: "Kuang Si Falls", desc: "Turquoise waters." },
+                { img: "https://images.unsplash.com/photo-1528181304800-259b08848526", title: "Pha That Luang", desc: "Golden Stupa." }
             ],
              "Myanmar": [
                 { img: "https://images.unsplash.com/photo-1523595674068-12c5b369c3f8", title: "Bagan", desc: "Valley of temples." },
                 { img: "https://images.unsplash.com/photo-1541065734289-4da4c3510c43", title: "Inle Lake", desc: "Floating gardens." },
-                { img: "https://images.unsplash.com/photo-1527236599092-23c21c7847c0", title: "Shwedagon Pagoda", desc: "Golden stupa." }
+                { img: "https://images.unsplash.com/photo-1527236599092-23c21c7847c0", title: "Shwedagon Pagoda", desc: "Golden stupa." },
+                { img: "https://images.unsplash.com/photo-1598555845014-27928828b6d5", title: "Mandalay Hill", desc: "Sunset views." }
             ],
              "Cambodia": [
+                { img: "https://images.unsplash.com/photo-1540611025311-01df3ce54629", title: "Angkor Wat", desc: "Ancient temple complex." },
                 { img: "https://images.unsplash.com/photo-1565063065096-749c95b46e34", title: "Angkor Thom", desc: "Bayon Temple faces." },
                 { img: "https://images.unsplash.com/photo-1543169864-469600d43a6b", title: "Phnom Penh", desc: "Royal Palace." },
                 { img: "https://images.unsplash.com/photo-1579201723467-f6d339327318", title: "Koh Rong", desc: "Island escape." }
@@ -873,52 +883,63 @@
                 { img: "https://images.unsplash.com/photo-1542385196-48e02d4cb804", title: "Sultan Omar Ali Saifuddien", desc: "Golden mosque." },
                 { img: "https://images.unsplash.com/photo-1627916567341-38166c30f406", title: "Kampong Ayer", desc: "Water village." },
                 { img: "https://images.unsplash.com/photo-1622956247920-5696d5573489", title: "Temburong", desc: "Rainforest park." }
+            ],
+            "Timor-Leste": [
+                { img: "https://images.unsplash.com/photo-1601625463687-25541fb72f62", title: "Cristo Rei", desc: "Dili landmark." },
+                { img: "https://images.unsplash.com/photo-1589301760576-47c4dd4058f4", title: "Atauro Island", desc: "Diving paradise." },
+                { img: "https://images.unsplash.com/photo-1623838804048-d3266205e45a", title: "Mount Ramelau", desc: "Highest peak." }
             ]
         };
 
-        // Render Tourism Logic
-        function renderTourismNav() {
-            const nav = document.getElementById('tourism-nav');
+        // Render Tourism Logic - New Grid View
+        function renderTourismCountries() {
+            const grid = document.getElementById('tourism-country-grid');
             const countries = Object.keys(tourismData);
             
-            nav.innerHTML = countries.map(c => `
-                <button onclick="filterTourism('${c}')" class="px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 hover:border-neon-blue transition-all whitespace-nowrap text-sm ${c === 'All' ? 'bg-neon-blue/20 border-neon-blue text-neon-blue' : 'text-gray-400'}">
-                    ${c}
-                </button>
-            `).join('');
+            grid.innerHTML = countries.map(c => {
+                // Get the first image as cover, or a default
+                const coverImg = tourismData[c][0]?.img || "https://images.unsplash.com/photo-1464817739973-0128fe77aaa1";
+                return `
+                <div onclick="showCountryGallery('${c}')" class="glass-panel rounded-xl h-48 cursor-pointer relative overflow-hidden group border border-white/10 hover:border-neon-blue transition-all duration-300">
+                    <img src="${coverImg}?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" alt="${c}">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <h3 class="text-2xl font-bold text-white group-hover:text-neon-blue transition-colors">${c}</h3>
+                        <p class="text-xs text-gray-400 group-hover:text-white transition-colors">${tourismData[c].length} Photos</p>
+                    </div>
+                    <div class="absolute top-4 right-4 bg-black/50 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fas fa-images text-white"></i>
+                    </div>
+                </div>
+            `}).join('');
         }
 
-        function filterTourism(country) {
-            const gallery = document.getElementById('tourism-gallery');
-            const items = tourismData[country] || [];
+        function showCountryGallery(country) {
+            // Hide Grid, Show Gallery
+            document.getElementById('tourism-country-grid').classList.add('hidden');
+            document.getElementById('tourism-gallery-view').classList.remove('hidden');
+            document.getElementById('tourism-back-btn').classList.remove('hidden');
             
-            // Update Active Button State
-            const btns = document.querySelectorAll('#tourism-nav button');
-            btns.forEach(b => {
-                if(b.textContent.trim() === country) {
-                    b.className = "px-4 py-2 rounded-full border border-neon-blue bg-neon-blue/20 text-neon-blue transition-all whitespace-nowrap text-sm";
-                } else {
-                    b.className = "px-4 py-2 rounded-full border border-white/20 hover:bg-white/10 hover:border-neon-blue text-gray-400 transition-all whitespace-nowrap text-sm";
-                }
-            });
-
-            // Animate Out
-            gallery.style.opacity = '0';
+            // Populate Content
+            document.getElementById('gallery-country-title').innerText = country;
+            const galleryContent = document.getElementById('tourism-gallery-content');
+            const items = tourismData[country];
             
-            setTimeout(() => {
-                gallery.innerHTML = items.map(item => `
-                    <div class="gallery-item relative h-64 rounded-xl overflow-hidden cursor-pointer group">
-                        <img src="${item.img}?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="${item.title}">
-                        <div class="gallery-overlay absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-4">
-                            <h3 class="text-xl font-bold text-white mb-1 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">${item.title}</h3>
-                            <p class="text-neon-blue text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">${item.desc}</p>
-                        </div>
+            galleryContent.innerHTML = items.map(item => `
+                <div class="gallery-item relative h-72 rounded-xl overflow-hidden cursor-pointer group shadow-2xl">
+                    <img src="${item.img}?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="${item.title}">
+                    <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 border-4 border-transparent hover:border-neon-blue">
+                        <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 font-serif">${item.title}</h3>
+                        <p class="text-neon-blue text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 font-mono">${item.desc}</p>
                     </div>
-                `).join('');
-                
-                // Animate In
-                gallery.style.opacity = '1';
-            }, 300);
+                </div>
+            `).join('');
+        }
+        
+        function showTourismGrid() {
+            document.getElementById('tourism-gallery-view').classList.add('hidden');
+            document.getElementById('tourism-back-btn').classList.add('hidden');
+            document.getElementById('tourism-country-grid').classList.remove('hidden');
         }
 
 
@@ -983,8 +1004,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderMembers();
-            renderTourismNav();
-            filterTourism('All');
+            renderTourismCountries();
         });
 
     </script>
