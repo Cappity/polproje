@@ -247,8 +247,9 @@
                 <div class="relative h-[50vh] rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
                     <!-- VIDEO BACKGROUND -->
                     <div class="video-docker absolute top-0 left-0 w-full h-full overflow-hidden">
+                        <!-- Updated to Google Drive Link -->
                         <iframe 
-                            src="https://www.youtube.com/embed/Tski8ts7u-k?autoplay=1&mute=1&controls=0&loop=1&playlist=Tski8ts7u-k&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1" 
+                            src="https://drive.google.com/file/d/13nEVer4ddbFO6aG7ySKO_eewFuCBt6P4/preview?autoplay=1&mute=1" 
                             frameborder="0" 
                             allow="autoplay; encrypted-media" 
                             allowfullscreen>
@@ -689,10 +690,10 @@
                     <!-- Shreeya -->
                     <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-neon-red/50 transition-all duration-300 group">
                          <div class="w-24 h-24 rounded-full border-2 border-neon-red mx-auto mb-6 overflow-hidden">
-                             <!-- [USER EDIT]: PASTE SHREEYA'S PHOTO LINK BELOW -->
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300&auto=format&fit=crop" class="w-full h-full object-cover" alt="Shreeya">
+                             <!-- [UPDATED IMAGE & NAME] -->
+                            <img src="https://i.ibb.co/MxTvG2kS/image.png" class="w-full h-full object-cover" alt="Shreeya">
                         </div>
-                        <h3 class="text-2xl font-bold text-white">Shreeya Kakkar</h3>
+                        <h3 class="text-2xl font-bold text-white">Shreeya Kakar</h3>
                         <p class="text-neon-red text-xs font-bold tracking-widest uppercase mb-4">Senior Analyst</p>
                         <div class="bg-white/5 p-3 rounded text-left">
                             <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -888,7 +889,7 @@
             { 
                 name: "Brunei", 
                 joined: "1984", 
-                student: "Shreeya Kakkar", 
+                student: "Shreeya Kakar", 
                 flag: "bn", 
                 desc: "A tiny, oil-rich sultanate on the island of Borneo. It has one of the highest standards of living in the world due to energy wealth.",
                 political: "Absolute monarchy under Islamic law (Sharia). Economically almost entirely dependent on crude oil and natural gas exports.",
@@ -924,7 +925,7 @@
             { 
                 name: "Cambodia", 
                 joined: "1999", 
-                student: "Shreeya Kakkar", 
+                student: "Shreeya Kakar", 
                 flag: "kh", 
                 desc: "Home to Angkor Wat. It has a rapidly growing garment and tourism sector, having rebuilt after the Khmer Rouge era.",
                 political: "Constitutional monarchy dominant-party system. It has very close economic and military ties with Beijing.",
@@ -1117,17 +1118,17 @@
             if(pageId === 'ai') {
                 introLayer.classList.remove('hidden');
                 introLayer.style.opacity = '1';
-                // Play Intro
-                introVideo.src = "https://www.youtube.com/embed/CHy9NSgEsWA?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1";
+                // Play Intro - Using Google Drive Link
+                introVideo.src = "https://drive.google.com/file/d/1G0cnQrZJWriDPISVV6121owFS52O8BH3/preview?autoplay=1"; 
                 
-                // Fade out after 5 seconds
+                // Fade out after 20 seconds
                 setTimeout(() => {
                     introLayer.style.opacity = '0';
                     setTimeout(() => {
                         introLayer.classList.add('hidden');
                         introVideo.src = ""; // Stop video
                     }, 1000); // Wait for fade transition
-                }, 5000); 
+                }, 20000); // 20 Seconds duration
             } else {
                 // Ensure video stops if navigating away quickly
                 introVideo.src = "";
