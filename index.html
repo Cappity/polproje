@@ -36,6 +36,7 @@
                         'float': 'float 6s ease-in-out infinite',
                         'spin-slow': 'spin 12s linear infinite',
                         'fade-out-delay': 'fadeOutDelay 2.5s forwards',
+                        'scanline': 'scanline 8s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -46,6 +47,10 @@
                             '0%': { opacity: '1' },
                             '70%': { opacity: '1' },
                             '100%': { opacity: '0', visibility: 'hidden' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
                         }
                     }
                 }
@@ -167,6 +172,22 @@
             .video-docker iframe {
                 width: 177.78vh;
             }
+        }
+
+        /* CRT Scanline Effect */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 20;
         }
     </style>
 </head>
@@ -572,8 +593,9 @@
 
         <!-- PAGE: AI BOT (STARTUP STYLE) -->
         <section id="ai" class="page-section h-screen p-8 hidden flex flex-col relative overflow-hidden">
-            <!-- Background Grid -->
+            <!-- Background Grid & Scanlines -->
             <div class="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] pointer-events-none"></div>
+            <div class="scanlines"></div>
 
             <!-- INTRO VIDEO OVERLAY -->
             <div id="ai-intro-layer" class="absolute inset-0 z-[60] bg-black flex items-center justify-center transition-opacity duration-1000 hidden">
@@ -584,6 +606,10 @@
                     frameborder="0" 
                     allow="autoplay; encrypted-media">
                 </iframe>
+                <!-- SKIP BUTTON -->
+                <button onclick="skipIntro()" class="absolute bottom-10 right-10 z-[70] px-6 py-2 bg-black/50 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-all font-mono text-xs tracking-widest backdrop-blur-md cursor-pointer group">
+                    SKIP INITIALIZATION <i class="fas fa-forward ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </button>
             </div>
 
             <div class="max-w-6xl mx-auto w-full h-full flex flex-col md:flex-row gap-6 relative z-10">
@@ -596,8 +622,8 @@
                         </div>
                         <h2 class="text-4xl font-serif font-bold text-white mb-2">AZC<span class="text-neon-blue">INTELLIGENCE</span></h2>
                         <p class="text-neon-blue font-mono text-xs tracking-[0.3em] uppercase mb-6">PROJECT: OMNISCIENCE</p>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6 font-light">
-                            Deploying advanced language models to synthesize geopolitical data in real-time. Ask anything about ASEAN trade, history, or treaties.
+                        <p id="ai-typewriter" class="text-gray-400 text-sm leading-relaxed mb-6 font-light font-mono min-h-[80px]">
+                            <!-- Text injected via JS -->
                         </p>
                         <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
                             <div class="flex items-center gap-2">
@@ -650,7 +676,10 @@
                         <div class="flex-1 bg-black/40 relative z-0">
                              <!-- Loading Overlay (Fades out) -->
                              <div class="absolute inset-0 bg-black flex items-center justify-center pointer-events-none z-50 animate-fade-out-delay">
-                                <div class="font-mono text-neon-blue text-sm tracking-widest">INITIALIZING NEURAL PATHWAYS...</div>
+                                <div class="font-mono text-neon-blue text-sm tracking-widest flex flex-col items-center">
+                                    <i class="fas fa-microchip text-4xl mb-4 animate-spin-slow"></i>
+                                    INITIALIZING NEURAL PATHWAYS...
+                                </div>
                              </div>
                              <zapier-interfaces-chatbot-embed is-popup='false' chatbot-id='cmkwi1es9014bum1duy98j1cy' height='100%' width='100%' class="w-full h-full block"></zapier-interfaces-chatbot-embed>
                         </div>
@@ -1093,6 +1122,24 @@
             document.getElementById('detail-modal').classList.remove('open');
         }
 
+        // --- NEW AI TYPEWRITER & LOGIC ---
+        let aiIntroTimeout;
+        const startupText = "Deploying advanced language models to synthesize geopolitical data in real-time. Ask anything about ASEAN trade, history, or treaties.";
+
+        function typeWriter(text, elementId, speed) {
+            let i = 0;
+            const el = document.getElementById(elementId);
+            el.innerHTML = "";
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
         // Navigation
         function switchPage(pageId) {
             document.querySelectorAll('.page-section').forEach(sec => {
@@ -1111,29 +1158,50 @@
             });
             document.getElementById('nav-' + pageId).classList.add('nav-active');
 
-            // Handle AI Intro Video Logic
+            // Handle AI Logic
             const introLayer = document.getElementById('ai-intro-layer');
             const introVideo = document.getElementById('ai-intro-video');
 
             if(pageId === 'ai') {
+                // Reset State
                 introLayer.classList.remove('hidden');
                 introLayer.style.opacity = '1';
-                // Play Intro - Using YouTube Embed (with sound)
-                introVideo.src = "https://www.youtube.com/embed/CHy9NSgEsWA?autoplay=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1"; 
                 
-                // Fade out after 20 seconds
-                setTimeout(() => {
-                    introLayer.style.opacity = '0';
-                    setTimeout(() => {
-                        introLayer.classList.add('hidden');
-                        introVideo.src = ""; // Stop video
-                    }, 1000); // Wait for fade transition
-                }, 20000); // 20 Seconds duration
+                // Play Intro
+                introVideo.src = "https://www.youtube.com/embed/CHy9NSgEsWA?autoplay=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1";
+                
+                // Start Typewriter Effect
+                typeWriter(startupText, "ai-typewriter", 30);
+
+                // Clear previous timeout if user switches back and forth
+                if(aiIntroTimeout) clearTimeout(aiIntroTimeout);
+
+                // Auto-Fade after 20s
+                aiIntroTimeout = setTimeout(() => {
+                    endIntro();
+                }, 20000); 
             } else {
-                // Ensure video stops if navigating away quickly
+                // Reset when leaving page
                 introVideo.src = "";
                 introLayer.classList.add('hidden');
+                if(aiIntroTimeout) clearTimeout(aiIntroTimeout);
             }
+        }
+
+        function skipIntro() {
+            if(aiIntroTimeout) clearTimeout(aiIntroTimeout);
+            endIntro();
+        }
+
+        function endIntro() {
+            const introLayer = document.getElementById('ai-intro-layer');
+            const introVideo = document.getElementById('ai-intro-video');
+            
+            introLayer.style.opacity = '0';
+            setTimeout(() => {
+                introLayer.classList.add('hidden');
+                introVideo.src = ""; // Stop video
+            }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
