@@ -37,6 +37,7 @@
                         'spin-slow': 'spin 12s linear infinite',
                         'fade-out-delay': 'fadeOutDelay 2.5s forwards',
                         'scanline': 'scanline 8s linear infinite',
+                        'scroll-up': 'scrollUp 20s linear infinite',
                     },
                     keyframes: {
                         float: {
@@ -51,6 +52,10 @@
                         scanline: {
                             '0%': { transform: 'translateY(-100%)' },
                             '100%': { transform: 'translateY(100%)' }
+                        },
+                        scrollUp: {
+                            '0%': { transform: 'translateY(0)' },
+                            '100%': { transform: 'translateY(-50%)' }
                         }
                     }
                 }
@@ -189,6 +194,16 @@
             pointer-events: none;
             z-index: 20;
         }
+
+        /* System Log Text */
+        .sys-log {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: #00f3ff;
+            opacity: 0.7;
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col md:flex-row overflow-hidden">
@@ -268,7 +283,7 @@
                 <div class="relative h-[50vh] rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
                     <!-- VIDEO BACKGROUND -->
                     <div class="video-docker absolute top-0 left-0 w-full h-full overflow-hidden">
-                        <!-- Reverted to YouTube Link (Home Banner) -->
+                        <!-- YouTube Link (Home Banner) -->
                         <iframe 
                             src="https://www.youtube.com/embed/Tski8ts7u-k?autoplay=1&mute=1&controls=0&loop=1&playlist=Tski8ts7u-k&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1" 
                             frameborder="0" 
@@ -607,25 +622,25 @@
                     allow="autoplay; encrypted-media">
                 </iframe>
                 <!-- SKIP BUTTON -->
-                <button onclick="skipIntro()" class="absolute bottom-10 right-10 z-[70] px-6 py-2 bg-black/50 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-all font-mono text-xs tracking-widest backdrop-blur-md cursor-pointer group">
+                <button onclick="skipIntro()" class="absolute bottom-10 right-10 z-[70] px-6 py-2 bg-black/80 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-all font-mono text-xs tracking-widest backdrop-blur-md cursor-pointer group shadow-[0_0_20px_rgba(0,243,255,0.3)]">
                     SKIP INITIALIZATION <i class="fas fa-forward ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </div>
 
-            <div class="max-w-6xl mx-auto w-full h-full flex flex-col md:flex-row gap-6 relative z-10">
+            <div class="max-w-7xl mx-auto w-full h-full flex flex-col md:flex-row gap-6 relative z-10">
                 
                 <!-- Left Panel: Startup Pitch / Info -->
                 <div class="w-full md:w-1/3 flex flex-col justify-center space-y-6">
-                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-neon-blue relative overflow-hidden group">
+                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-neon-blue relative overflow-hidden group shadow-[0_0_30px_rgba(0,243,255,0.1)]">
                         <div class="absolute top-0 right-0 p-4 opacity-20">
-                            <i class="fas fa-brain text-6xl text-neon-blue"></i>
+                            <i class="fas fa-brain text-6xl text-neon-blue animate-pulse-slow"></i>
                         </div>
                         <h2 class="text-4xl font-serif font-bold text-white mb-2">AZC<span class="text-neon-blue">INTELLIGENCE</span></h2>
                         <p class="text-neon-blue font-mono text-xs tracking-[0.3em] uppercase mb-6">PROJECT: OMNISCIENCE</p>
                         <p id="ai-typewriter" class="text-gray-400 text-sm leading-relaxed mb-6 font-light font-mono min-h-[80px]">
                             <!-- Text injected via JS -->
                         </p>
-                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500 border-t border-white/5 pt-4">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> v2.4.0 Stable
                             </div>
@@ -634,15 +649,12 @@
                         </div>
                     </div>
 
-                    <!-- System Stats -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="glass-panel p-4 rounded-xl border border-white/5">
-                            <p class="text-[10px] text-gray-500 uppercase mb-1">Knowledge Base</p>
-                            <p class="text-xl font-bold text-white">1967-2026</p>
-                        </div>
-                        <div class="glass-panel p-4 rounded-xl border border-white/5">
-                            <p class="text-[10px] text-gray-500 uppercase mb-1">Security Level</p>
-                            <p class="text-xl font-bold text-neon-purple">Encrypted</p>
+                    <!-- System Logs Simulator -->
+                    <div class="glass-panel p-4 rounded-xl border border-white/5 h-48 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0c16]/90 z-10 pointer-events-none"></div>
+                        <p class="text-[10px] text-gray-500 uppercase mb-2 border-b border-white/10 pb-1">System Logs</p>
+                        <div id="system-logs" class="sys-log flex flex-col justify-end h-full pb-4">
+                            <!-- JS Injected Logs -->
                         </div>
                     </div>
                 </div>
@@ -764,8 +776,8 @@
                    <!-- Vineet -->
                    <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-green-500/50 transition-all duration-300 group">
                         <div class="w-24 h-24 rounded-full border-2 border-green-500 mx-auto mb-6 overflow-hidden">
-                           <!-- [USER EDIT]: PASTE VINEET'S PHOTO LINK BELOW -->
-                           <img src="https://images.unsplash.com/photo-1537511446984-935f663eb1f4?q=80&w=300&auto=format&fit=crop" class="w-full h-full object-cover" alt="Vineet">
+                           <!-- [UPDATED IMAGE] -->
+                           <img src="https://i.ibb.co/VcMKg5Mh/image.png" class="w-full h-full object-cover" alt="Vineet">
                        </div>
                        <h3 class="text-2xl font-bold text-white">Vineet Mishra</h3>
                        <p class="text-green-500 text-xs font-bold tracking-widest uppercase mb-4">Regional Specialist</p>
@@ -1036,15 +1048,18 @@
             const countries = Object.keys(tourismData);
             
             grid.innerHTML = countries.map(c => {
-                // Get the first image as cover, or a default
-                const coverImg = tourismData[c][0]?.img || "https://images.unsplash.com/photo-1464817739973-0128fe77aaa1";
+                // Fallback image logic
+                const firstItem = tourismData[c][0];
+                const coverImg = firstItem && firstItem.img ? firstItem.img : "https://images.unsplash.com/photo-1464817739973-0128fe77aaa1";
+                const count = tourismData[c] ? tourismData[c].length : 0;
+
                 return `
                 <div onclick="showCountryGallery('${c}')" class="glass-panel rounded-xl h-48 cursor-pointer relative overflow-hidden group border border-white/10 hover:border-neon-blue transition-all duration-300">
-                    <img src="${coverImg}?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" alt="${c}">
+                    <img src="${coverImg}?q=80&w=600&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100" alt="${c}" onerror="this.src='https://images.unsplash.com/photo-1530521954074-e64f6810b32d?q=80&w=600&auto=format&fit=crop'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                     <div class="absolute bottom-4 left-4">
                         <h3 class="text-2xl font-bold text-white group-hover:text-neon-blue transition-colors">${c}</h3>
-                        <p class="text-xs text-gray-400 group-hover:text-white transition-colors">${tourismData[c].length} Photos</p>
+                        <p class="text-xs text-gray-400 group-hover:text-white transition-colors">${count} Photos</p>
                     </div>
                     <div class="absolute top-4 right-4 bg-black/50 p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                         <i class="fas fa-images text-white"></i>
@@ -1062,11 +1077,16 @@
             // Populate Content
             document.getElementById('gallery-country-title').innerText = country;
             const galleryContent = document.getElementById('tourism-gallery-content');
-            const items = tourismData[country];
+            const items = tourismData[country] || [];
             
+            if (items.length === 0) {
+                 galleryContent.innerHTML = `<p class="text-gray-400 col-span-3 text-center">No images available for this region yet.</p>`;
+                 return;
+            }
+
             galleryContent.innerHTML = items.map(item => `
                 <div class="gallery-item relative h-72 rounded-xl overflow-hidden cursor-pointer group shadow-2xl">
-                    <img src="${item.img}?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="${item.title}">
+                    <img src="${item.img}?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1527685601640-6903e3988861?q=80&w=800&auto=format&fit=crop'">
                     <div class="gallery-overlay absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 flex flex-col items-center justify-center text-center p-6 border-4 border-transparent hover:border-neon-blue">
                         <h3 class="text-2xl font-bold text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 font-serif">${item.title}</h3>
                         <p class="text-neon-blue text-sm translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 font-mono">${item.desc}</p>
@@ -1124,7 +1144,20 @@
 
         // --- NEW AI TYPEWRITER & LOGIC ---
         let aiIntroTimeout;
+        let logInterval;
         const startupText = "Deploying advanced language models to synthesize geopolitical data in real-time. Ask anything about ASEAN trade, history, or treaties.";
+        const systemLogs = [
+            "Initializing secure handshake...",
+            "Loading regional datasets [ASEAN_V2.db]...",
+            "Decrypting diplomatic protocols...",
+            "Connecting to neural nodes: SG, ID, VN...",
+            "Analyzing trade routes...",
+            "Optimizing response latency...",
+            "Checking geopolitical stability index...",
+            "Modules loaded: 98%",
+            "AZC Core online.",
+            "Awaiting user input..."
+        ];
 
         function typeWriter(text, elementId, speed) {
             let i = 0;
@@ -1138,6 +1171,25 @@
                 }
             }
             type();
+        }
+
+        function runSystemLogs() {
+            const logContainer = document.getElementById('system-logs');
+            logContainer.innerHTML = "";
+            let i = 0;
+            logInterval = setInterval(() => {
+                if(i < systemLogs.length) {
+                    const line = document.createElement('div');
+                    line.textContent = `> ${systemLogs[i]}`;
+                    line.style.opacity = '0';
+                    line.style.animation = 'fadeIn 0.2s forwards';
+                    logContainer.appendChild(line);
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(logInterval);
+                }
+            }, 800);
         }
 
         // Navigation
@@ -1170,8 +1222,9 @@
                 // Play Intro
                 introVideo.src = "https://www.youtube.com/embed/CHy9NSgEsWA?autoplay=1&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1";
                 
-                // Start Typewriter Effect
+                // Start Typewriter & Logs
                 typeWriter(startupText, "ai-typewriter", 30);
+                runSystemLogs();
 
                 // Clear previous timeout if user switches back and forth
                 if(aiIntroTimeout) clearTimeout(aiIntroTimeout);
@@ -1185,6 +1238,7 @@
                 introVideo.src = "";
                 introLayer.classList.add('hidden');
                 if(aiIntroTimeout) clearTimeout(aiIntroTimeout);
+                if(logInterval) clearInterval(logInterval);
             }
         }
 
