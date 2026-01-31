@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ASEAN 360: The Power Bloc | AZCTech Project</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
@@ -162,20 +162,17 @@
             top: 50%;
             left: 50%;
             width: 100vw;
-            height: 100vh; /* Ensures full cover */
-            transform: translate(-50%, -50%) scale(1.3); /* Scale up to prevent black bars */
+            height: 100vh;
+            transform: translate(-50%, -50%) scale(1.3);
             pointer-events: none;
         }
         
-        /* Specific Aspect Ratio Fix for Embedded Video */
-        @media (min-aspect-ratio: 16/9) {
+        /* Mobile Video Fix */
+        @media (max-width: 768px) {
             .video-docker iframe {
-                height: 56.25vw;
-            }
-        }
-        @media (max-aspect-ratio: 16/9) {
-            .video-docker iframe {
-                width: 177.78vh;
+                width: 300%; 
+                height: 100%;
+                transform: translate(-50%, -50%) scale(1);
             }
         }
 
@@ -228,43 +225,48 @@
     <!-- Canvas for Stars -->
     <canvas id="starfield"></canvas>
 
-    <!-- Sidebar Navigation -->
-    <nav class="w-full md:w-64 glass-panel h-auto md:h-full z-50 flex flex-col justify-between shrink-0 border-r border-white/5">
-        <div>
-            <div class="p-8 border-b border-white/5">
-                <h1 class="font-serif font-bold text-2xl tracking-widest text-white">ASEAN<span class="text-neon-red">360</span></h1>
+    <!-- Sidebar Navigation (Responsive) -->
+    <nav class="w-full md:w-64 glass-panel md:h-full z-50 flex flex-col justify-between shrink-0 border-b md:border-b-0 md:border-r border-white/5 relative">
+        <div class="flex items-center justify-between p-6 md:p-8">
+            <div>
+                <h1 class="font-serif font-bold text-xl md:text-2xl tracking-widest text-white">ASEAN<span class="text-neon-red">360</span></h1>
                 <p class="text-[10px] text-gray-500 font-mono mt-1">RESEARCH UNIT: XII-T/V</p>
             </div>
-
-            <div class="p-4 space-y-1">
-                <button onclick="switchPage('home')" id="nav-home" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 nav-active group">
-                    <i class="fas fa-chart-pie w-5 group-hover:text-neon-blue transition-colors"></i> <span class="font-medium tracking-wide">Overview</span>
-                </button>
-                <button onclick="switchPage('members')" id="nav-members" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-flag w-5 group-hover:text-neon-purple transition-colors"></i> <span class="font-medium tracking-wide">Member Dossiers</span>
-                </button>
-                <button onclick="switchPage('tourism')" id="nav-tourism" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-plane w-5 group-hover:text-orange-400 transition-colors"></i> <span class="font-medium tracking-wide">Travel & Culture</span>
-                </button>
-                <button onclick="switchPage('power')" id="nav-power" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-bolt w-5 group-hover:text-neon-gold transition-colors"></i> <span class="font-medium tracking-wide">Power Centres</span>
-                </button>
-                <button onclick="switchPage('relations')" id="nav-relations" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-handshake w-5 group-hover:text-neon-red transition-colors"></i> <span class="font-medium tracking-wide">India Relations</span>
-                </button>
-                <button onclick="switchPage('media')" id="nav-media" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-play-circle w-5 group-hover:text-green-400 transition-colors"></i> <span class="font-medium tracking-wide">Media Hub</span>
-                </button>
-                <button onclick="switchPage('ai')" id="nav-ai" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-robot w-5 group-hover:text-blue-400 transition-colors"></i> <span class="font-medium tracking-wide">AZC Intelligence</span>
-                </button>
-                <button onclick="switchPage('team')" id="nav-team" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
-                    <i class="fas fa-code w-5 group-hover:text-gray-100 transition-colors"></i> <span class="font-medium tracking-wide">Developers</span>
-                </button>
-            </div>
+            <!-- Mobile Hamburger -->
+            <button class="md:hidden text-white text-2xl focus:outline-none hover:text-neon-blue transition-colors" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
         </div>
 
-        <div class="p-6">
+        <!-- Menu Items (Hidden on Mobile by default) -->
+        <div id="nav-menu" class="hidden md:block absolute md:static top-full left-0 w-full bg-[#050510] md:bg-transparent border-b md:border-0 border-white/10 p-4 space-y-1 z-50 transition-all">
+            <button onclick="switchPage('home')" id="nav-home" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 nav-active group">
+                <i class="fas fa-chart-pie w-5 group-hover:text-neon-blue transition-colors"></i> <span class="font-medium tracking-wide">Overview</span>
+            </button>
+            <button onclick="switchPage('members')" id="nav-members" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-flag w-5 group-hover:text-neon-purple transition-colors"></i> <span class="font-medium tracking-wide">Member Dossiers</span>
+            </button>
+            <button onclick="switchPage('tourism')" id="nav-tourism" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-plane w-5 group-hover:text-orange-400 transition-colors"></i> <span class="font-medium tracking-wide">Travel & Culture</span>
+            </button>
+            <button onclick="switchPage('power')" id="nav-power" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-bolt w-5 group-hover:text-neon-gold transition-colors"></i> <span class="font-medium tracking-wide">Power Centres</span>
+            </button>
+            <button onclick="switchPage('relations')" id="nav-relations" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-handshake w-5 group-hover:text-neon-red transition-colors"></i> <span class="font-medium tracking-wide">India Relations</span>
+            </button>
+            <button onclick="switchPage('media')" id="nav-media" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-play-circle w-5 group-hover:text-green-400 transition-colors"></i> <span class="font-medium tracking-wide">Media Hub</span>
+            </button>
+            <button onclick="switchPage('ai')" id="nav-ai" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-robot w-5 group-hover:text-blue-400 transition-colors"></i> <span class="font-medium tracking-wide">AZC Intelligence</span>
+            </button>
+            <button onclick="switchPage('team')" id="nav-team" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-code w-5 group-hover:text-gray-100 transition-colors"></i> <span class="font-medium tracking-wide">Developers</span>
+            </button>
+        </div>
+
+        <div class="hidden md:block p-6">
             <div class="glass-panel p-4 rounded text-center relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-blue to-neon-purple"></div>
                 <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-2">System Status</p>
@@ -277,10 +279,10 @@
     <main class="flex-1 p-0 overflow-y-auto overflow-x-hidden relative scroll-smooth" id="main-scroll">
         
         <!-- PAGE: HOME -->
-        <section id="home" class="page-section active min-h-screen p-8">
+        <section id="home" class="page-section active min-h-screen p-4 md:p-8">
             <div class="max-w-7xl mx-auto">
                 <!-- Hero Banner -->
-                <div class="relative h-[50vh] rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
+                <div class="relative h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden mb-8 md:mb-12 border border-white/10 shadow-2xl">
                     <!-- VIDEO BACKGROUND -->
                     <div class="video-docker absolute top-0 left-0 w-full h-full overflow-hidden">
                         <!-- YouTube Link (Home Banner) -->
@@ -294,11 +296,11 @@
                     
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050510] via-black/40 to-transparent pointer-events-none"></div>
                     
-                    <div class="absolute bottom-0 left-0 p-12 z-10 w-full">
-                        <div class="flex items-end justify-between">
+                    <div class="absolute bottom-0 left-0 p-6 md:p-12 z-10 w-full">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between">
                             <div>
-                                <h1 class="text-6xl md:text-8xl font-serif font-bold text-white mb-2 leading-none">ASEAN</h1>
-                                <p class="text-2xl text-neon-blue font-light tracking-[0.5em] uppercase">Emerging Centre of Power</p>
+                                <h1 class="text-4xl md:text-8xl font-serif font-bold text-white mb-2 leading-none">ASEAN</h1>
+                                <p class="text-lg md:text-2xl text-neon-blue font-light tracking-[0.3em] md:tracking-[0.5em] uppercase">Emerging Centre of Power</p>
                             </div>
                             <div class="hidden md:block text-right">
                                 <p class="text-gray-400 font-mono text-sm">EST. 1967<br>BANGKOK, THAILAND</p>
@@ -308,33 +310,33 @@
                 </div>
 
                 <!-- KPI Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-                    <div class="glass-panel p-6 rounded-xl border-t-2 border-neon-blue hover:bg-white/5 transition-colors group">
-                        <div class="text-neon-blue text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-users"></i></div>
-                        <h3 class="text-4xl font-bold text-white">685M</h3>
-                        <p class="text-gray-400 text-xs uppercase tracking-wider mt-1">Total Population</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+                    <div class="glass-panel p-4 md:p-6 rounded-xl border-t-2 border-neon-blue hover:bg-white/5 transition-colors group">
+                        <div class="text-neon-blue text-2xl md:text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-users"></i></div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-white">685M</h3>
+                        <p class="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider mt-1">Total Population</p>
                     </div>
-                    <div class="glass-panel p-6 rounded-xl border-t-2 border-neon-purple hover:bg-white/5 transition-colors group">
-                        <div class="text-neon-purple text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-coins"></i></div>
-                        <h3 class="text-4xl font-bold text-white">$3.8T</h3>
-                        <p class="text-gray-400 text-xs uppercase tracking-wider mt-1">Combined GDP</p>
+                    <div class="glass-panel p-4 md:p-6 rounded-xl border-t-2 border-neon-purple hover:bg-white/5 transition-colors group">
+                        <div class="text-neon-purple text-2xl md:text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-coins"></i></div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-white">$3.8T</h3>
+                        <p class="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider mt-1">Combined GDP</p>
                     </div>
-                    <div class="glass-panel p-6 rounded-xl border-t-2 border-neon-red hover:bg-white/5 transition-colors group">
-                        <div class="text-neon-red text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-handshake"></i></div>
-                        <h3 class="text-4xl font-bold text-white">RCEP</h3>
-                        <p class="text-gray-400 text-xs uppercase tracking-wider mt-1">Largest Trade Bloc</p>
+                    <div class="glass-panel p-4 md:p-6 rounded-xl border-t-2 border-neon-red hover:bg-white/5 transition-colors group">
+                        <div class="text-neon-red text-2xl md:text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-handshake"></i></div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-white">RCEP</h3>
+                        <p class="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider mt-1">Largest Trade Bloc</p>
                     </div>
-                    <div class="glass-panel p-6 rounded-xl border-t-2 border-neon-gold hover:bg-white/5 transition-colors group">
-                        <div class="text-neon-gold text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-city"></i></div>
-                        <h3 class="text-4xl font-bold text-white">5.3%</h3>
-                        <p class="text-gray-400 text-xs uppercase tracking-wider mt-1">Avg. Annual Growth</p>
+                    <div class="glass-panel p-4 md:p-6 rounded-xl border-t-2 border-neon-gold hover:bg-white/5 transition-colors group">
+                        <div class="text-neon-gold text-2xl md:text-3xl mb-2 group-hover:scale-110 transition-transform"><i class="fas fa-city"></i></div>
+                        <h3 class="text-2xl md:text-4xl font-bold text-white">5.3%</h3>
+                        <p class="text-gray-400 text-[10px] md:text-xs uppercase tracking-wider mt-1">Avg. Annual Growth</p>
                     </div>
                 </div>
 
                 <!-- ASEAN ACHIEVEMENTS -->
-                <div class="mb-16">
-                    <h2 class="text-3xl font-serif text-white mb-8 border-l-4 border-neon-gold pl-4">ASEAN Achievements</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="mb-12 md:mb-16">
+                    <h2 class="text-2xl md:text-3xl font-serif text-white mb-6 md:mb-8 border-l-4 border-neon-gold pl-4">ASEAN Achievements</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                         <div class="glass-panel p-6 rounded-2xl group hover:border-neon-gold transition-colors">
                             <i class="fas fa-dove text-neon-gold text-2xl mb-4"></i>
                             <h3 class="text-xl font-bold text-white mb-2">Regional Peace</h3>
@@ -355,8 +357,8 @@
 
                 <!-- ASEAN COMMUNITIES -->
                 <div class="mb-12">
-                    <h2 class="text-2xl font-serif text-white mb-8 border-l-4 border-neon-blue pl-4">ASEAN Communities (The 3 Pillars)</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <h2 class="text-2xl font-serif text-white mb-6 md:mb-8 border-l-4 border-neon-blue pl-4">ASEAN Communities (The 3 Pillars)</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                         <!-- Security -->
                         <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group hover:-translate-y-2 transition-transform duration-500">
                             <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-colors"></div>
@@ -384,12 +386,12 @@
         </section>
 
         <!-- PAGE: MEMBERS -->
-        <section id="members" class="page-section min-h-screen p-8 hidden">
+        <section id="members" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-7xl mx-auto">
-                <header class="mb-12 flex justify-between items-end border-b border-white/10 pb-6">
+                <header class="mb-8 md:mb-12 flex flex-col md:flex-row md:justify-between md:items-end border-b border-white/10 pb-6">
                     <div>
-                        <h2 class="text-4xl font-serif font-bold text-white mb-2">Member Dossiers</h2>
-                        <p class="text-gray-400 font-mono text-sm">SELECT A NATION TO ACCESS CLASSIFIED DATA</p>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-2">Member Dossiers</h2>
+                        <p class="text-gray-400 font-mono text-xs md:text-sm">SELECT A NATION TO ACCESS CLASSIFIED DATA</p>
                     </div>
                 </header>
 
@@ -402,15 +404,15 @@
         </section>
 
         <!-- NEW PAGE: TOURISM & CULTURE -->
-        <section id="tourism" class="page-section min-h-screen p-8 hidden">
+        <section id="tourism" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-7xl mx-auto">
-                <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-6">
+                <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-6">
                     <div>
-                        <h2 class="text-4xl font-serif font-bold text-white mb-2">Travel & Culture</h2>
-                        <p class="text-gray-400 font-mono text-sm">EXPLORE THE DIVERSE LANDSCAPES OF SOUTHEAST ASIA</p>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-2">Travel & Culture</h2>
+                        <p class="text-gray-400 font-mono text-xs md:text-sm">EXPLORE THE DIVERSE LANDSCAPES OF SOUTHEAST ASIA</p>
                     </div>
                     <!-- Back Button (Hidden initially) -->
-                    <button id="tourism-back-btn" onclick="showTourismGrid()" class="hidden px-4 py-2 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-colors">
+                    <button id="tourism-back-btn" onclick="showTourismGrid()" class="hidden mt-4 md:mt-0 px-4 py-2 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-colors w-full md:w-auto">
                         <i class="fas fa-arrow-left mr-2"></i> Back to Map
                     </button>
                 </header>
@@ -422,8 +424,8 @@
 
                 <!-- VIEW 2: Photo Gallery (Hidden initially) -->
                 <div class="hidden" id="tourism-gallery-view">
-                    <h3 id="gallery-country-title" class="text-3xl font-bold text-white mb-6">Country Name</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="tourism-gallery-content">
+                    <h3 id="gallery-country-title" class="text-2xl md:text-3xl font-bold text-white mb-6">Country Name</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="tourism-gallery-content">
                         <!-- Photos Injected JS -->
                     </div>
                 </div>
@@ -431,23 +433,23 @@
         </section>
 
         <!-- PAGE: POWER -->
-        <section id="power" class="page-section min-h-screen p-8 hidden">
+        <section id="power" class="page-section min-h-screen p-4 md:p-8 hidden">
              <div class="max-w-5xl mx-auto">
-                <h2 class="text-4xl font-serif font-bold mb-8 text-white">Geopolitical Analysis</h2>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold mb-8 text-white">Geopolitical Analysis</h2>
 
                 <!-- Comparison Module -->
-                <div class="glass-panel p-10 rounded-2xl mb-12 border border-white/5 relative overflow-hidden">
+                <div class="glass-panel p-6 md:p-10 rounded-2xl mb-12 border border-white/5 relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10">
                         <i class="fas fa-balance-scale text-9xl text-white"></i>
                     </div>
                     
-                    <h3 class="text-2xl font-bold mb-8 text-neon-blue">Comparative Study: EU vs. ASEAN</h3>
+                    <h3 class="text-xl md:text-2xl font-bold mb-8 text-neon-blue">Comparative Study: EU vs. ASEAN</h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                         <!-- EU Side -->
                         <div class="border-l-2 border-blue-600 pl-6">
-                            <h4 class="text-xl font-bold text-white mb-4">European Union</h4>
-                            <ul class="space-y-4 text-sm text-gray-300">
+                            <h4 class="text-lg md:text-xl font-bold text-white mb-4">European Union</h4>
+                            <ul class="space-y-4 text-xs md:text-sm text-gray-300">
                                 <li class="flex items-start gap-3">
                                     <i class="fas fa-gavel text-blue-500 mt-1"></i>
                                     <span><strong>Supranational:</strong> Decisions made by EU institutions can override national laws.</span>
@@ -465,8 +467,8 @@
 
                         <!-- ASEAN Side -->
                         <div class="border-l-2 border-red-600 pl-6">
-                            <h4 class="text-xl font-bold text-white mb-4">ASEAN</h4>
-                            <ul class="space-y-4 text-sm text-gray-300">
+                            <h4 class="text-lg md:text-xl font-bold text-white mb-4">ASEAN</h4>
+                            <ul class="space-y-4 text-xs md:text-sm text-gray-300">
                                 <li class="flex items-start gap-3">
                                     <i class="fas fa-handshake text-red-500 mt-1"></i>
                                     <span><strong>Intergovernmental:</strong> Consultative forum. No supranational authority.</span>
@@ -530,11 +532,11 @@
         </section>
 
         <!-- PAGE: MEDIA HUB -->
-        <section id="media" class="page-section min-h-screen p-8 hidden">
+        <section id="media" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-6xl mx-auto">
                 <header class="mb-10 text-center">
-                    <h2 class="text-4xl font-serif font-bold mb-4">Visual Archives</h2>
-                    <p class="text-gray-400 font-mono text-sm">DOCUMENTARY FOOTAGE & EXPLAINERS</p>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">Visual Archives</h2>
+                    <p class="text-gray-400 font-mono text-xs md:text-sm">DOCUMENTARY FOOTAGE & EXPLAINERS</p>
                 </header>
 
                 <div class="glass-panel p-4 rounded-2xl shadow-2xl border border-neon-blue/30 max-w-4xl mx-auto">
@@ -549,46 +551,46 @@
                                 allowfullscreen>
                         </iframe>
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-white">Understanding ASEAN: The Geopolitics</h3>
-                        <p class="text-gray-400 text-sm mt-2">A comprehensive look at how the Association of Southeast Asian Nations functions as a geopolitical entity.</p>
+                    <div class="p-4 md:p-6">
+                        <h3 class="text-lg md:text-xl font-bold text-white">Understanding ASEAN: The Geopolitics</h3>
+                        <p class="text-gray-400 text-xs md:text-sm mt-2">A comprehensive look at how the Association of Southeast Asian Nations functions as a geopolitical entity.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- PAGE: INDIA RELATIONS -->
-        <section id="relations" class="page-section min-h-screen p-8 hidden">
+        <section id="relations" class="page-section min-h-screen p-4 md:p-8 hidden">
              <div class="max-w-6xl mx-auto">
-                <div class="relative h-64 rounded-2xl overflow-hidden mb-12">
+                <div class="relative h-48 md:h-64 rounded-2xl overflow-hidden mb-8 md:mb-12">
                     <img src="https://images.unsplash.com/photo-1599583236053-15629479b024?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover filter brightness-50" alt="India ASEAN">
                     <div class="absolute inset-0 flex flex-col justify-center items-center text-center">
-                        <h2 class="text-5xl font-serif font-bold text-white mb-2">India <span class="text-orange-500">&</span> ASEAN</h2>
-                        <p class="text-xl text-gray-200 italic font-serif">"Look East" to "Act East"</p>
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-2">India <span class="text-orange-500">&</span> ASEAN</h2>
+                        <p class="text-lg md:text-xl text-gray-200 italic font-serif">"Look East" to "Act East"</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                     <!-- Card 1 -->
-                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-orange-500 hover:-translate-y-2 transition-transform">
+                    <div class="glass-panel p-6 md:p-8 rounded-2xl border-t-4 border-orange-500 hover:-translate-y-2 transition-transform">
                         <div class="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center text-orange-500 mb-6"><i class="fas fa-chart-line text-xl"></i></div>
-                        <h3 class="text-xl font-bold mb-4">Economic Ties</h3>
+                        <h3 class="text-lg md:text-xl font-bold mb-4">Economic Ties</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Trade has surged since the <strong>Free Trade Agreement (AIFTA)</strong>. However, India withdrew from RCEP in 2019 to protect its service sector and dairy industries from Chinese competition.
                         </p>
                     </div>
                     <!-- Card 2 -->
-                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-white hover:-translate-y-2 transition-transform">
+                    <div class="glass-panel p-6 md:p-8 rounded-2xl border-t-4 border-white hover:-translate-y-2 transition-transform">
                         <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white mb-6"><i class="fas fa-shield-alt text-xl"></i></div>
-                        <h3 class="text-xl font-bold mb-4">Maritime Security</h3>
+                        <h3 class="text-lg md:text-xl font-bold mb-4">Maritime Security</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             Cooperation is vital in the Indo-Pacific. India supports "Freedom of Navigation" in the South China Sea and conducts naval exercises (SIMBEX) with member states like Singapore.
                         </p>
                     </div>
                     <!-- Card 3 -->
-                    <div class="glass-panel p-8 rounded-2xl border-t-4 border-green-500 hover:-translate-y-2 transition-transform">
+                    <div class="glass-panel p-6 md:p-8 rounded-2xl border-t-4 border-green-500 hover:-translate-y-2 transition-transform">
                         <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-6"><i class="fas fa-road text-xl"></i></div>
-                        <h3 class="text-xl font-bold mb-4">Connectivity</h3>
+                        <h3 class="text-lg md:text-xl font-bold mb-4">Connectivity</h3>
                         <p class="text-sm text-gray-400 leading-relaxed">
                             The <strong>India-Myanmar-Thailand Trilateral Highway</strong> acts as a physical bridge. The "Kaladan Multi-Modal Transit Transport Project" aims to connect India's east coast to Myanmar.
                         </p>
@@ -598,7 +600,7 @@
         </section>
 
         <!-- PAGE: AI BOT (STARTUP STYLE) -->
-        <section id="ai" class="page-section h-screen p-8 hidden flex flex-col relative overflow-hidden">
+        <section id="ai" class="page-section h-screen p-4 md:p-8 hidden flex flex-col relative overflow-hidden">
             <!-- Background Grid & Scanlines -->
             <div class="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,243,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)] pointer-events-none"></div>
             <div class="scanlines"></div>
@@ -613,25 +615,25 @@
                     allow="autoplay; encrypted-media">
                 </iframe>
                 <!-- SKIP BUTTON -->
-                <button onclick="skipIntro()" class="absolute bottom-10 right-10 z-[70] px-6 py-2 bg-black/80 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-all font-mono text-xs tracking-widest backdrop-blur-md cursor-pointer group shadow-[0_0_20px_rgba(0,243,255,0.3)]">
+                <button onclick="skipIntro()" class="absolute bottom-10 right-4 md:right-10 z-[70] px-4 md:px-6 py-2 bg-black/80 border border-neon-blue text-neon-blue rounded hover:bg-neon-blue hover:text-black transition-all font-mono text-[10px] md:text-xs tracking-widest backdrop-blur-md cursor-pointer group shadow-[0_0_20px_rgba(0,243,255,0.3)]">
                     SKIP INITIALIZATION <i class="fas fa-forward ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </div>
 
-            <div class="max-w-7xl mx-auto w-full h-full flex flex-col md:flex-row gap-6 relative z-10">
+            <div class="max-w-7xl mx-auto w-full h-full flex flex-col md:flex-row gap-4 md:gap-6 relative z-10">
                 
                 <!-- Left Panel: Startup Pitch / Info -->
-                <div class="w-full md:w-1/3 flex flex-col justify-center space-y-6">
-                    <div class="glass-panel p-8 rounded-2xl border-l-4 border-neon-blue relative overflow-hidden group shadow-[0_0_30px_rgba(0,243,255,0.1)]">
+                <div class="w-full md:w-1/3 flex flex-col justify-start md:justify-center space-y-4 md:space-y-6 order-2 md:order-1">
+                    <div class="glass-panel p-4 md:p-8 rounded-2xl border-l-4 border-neon-blue relative overflow-hidden group shadow-[0_0_30px_rgba(0,243,255,0.1)]">
                         <div class="absolute top-0 right-0 p-4 opacity-20">
-                            <i class="fas fa-brain text-6xl text-neon-blue animate-pulse-slow"></i>
+                            <i class="fas fa-brain text-4xl md:text-6xl text-neon-blue animate-pulse-slow"></i>
                         </div>
-                        <h2 class="text-4xl font-serif font-bold text-white mb-2">AZC<span class="text-neon-blue">INTELLIGENCE</span></h2>
-                        <p class="text-neon-blue font-mono text-xs tracking-[0.3em] uppercase mb-6">PROJECT: OMNISCIENCE</p>
-                        <p id="ai-typewriter" class="text-gray-400 text-sm leading-relaxed mb-6 font-light font-mono min-h-[80px]">
+                        <h2 class="text-2xl md:text-4xl font-serif font-bold text-white mb-2">AZC<span class="text-neon-blue">INTELLIGENCE</span></h2>
+                        <p class="text-neon-blue font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase mb-4 md:mb-6">PROJECT: OMNISCIENCE</p>
+                        <p id="ai-typewriter" class="text-gray-400 text-xs md:text-sm leading-relaxed mb-4 md:mb-6 font-light font-mono min-h-[60px] md:min-h-[80px]">
                             <!-- Text injected via JS -->
                         </p>
-                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500 border-t border-white/5 pt-4">
+                        <div class="flex items-center gap-4 text-[10px] md:text-xs font-mono text-gray-500 border-t border-white/5 pt-4">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> v2.4.0 Stable
                             </div>
@@ -641,7 +643,7 @@
                     </div>
 
                     <!-- System Logs Simulator -->
-                    <div class="glass-panel p-4 rounded-xl border border-white/5 h-48 overflow-hidden relative">
+                    <div class="glass-panel p-4 rounded-xl border border-white/5 h-32 md:h-48 overflow-hidden relative hidden md:block">
                         <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0c16]/90 z-10 pointer-events-none"></div>
                         <p class="text-[10px] text-gray-500 uppercase mb-2 border-b border-white/10 pb-1">System Logs</p>
                         <div id="system-logs" class="sys-log flex flex-col justify-end h-full pb-4">
@@ -651,7 +653,7 @@
                 </div>
 
                 <!-- Right Panel: The Interface -->
-                <div class="w-full md:w-2/3 h-full pb-8">
+                <div class="w-full md:w-2/3 h-full pb-4 md:pb-8 order-1 md:order-2">
                     <div class="h-full flex flex-col glass-panel rounded-2xl overflow-hidden border border-neon-blue/30 shadow-[0_0_50px_rgba(0,243,255,0.15)] relative">
                         <!-- Holographic Corner Accents -->
                         <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-neon-blue rounded-tl-2xl opacity-50"></div>
@@ -667,7 +669,7 @@
                                     <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
                                     <div class="w-3 h-3 rounded-full bg-green-500"></div>
                                 </div>
-                                <span class="ml-4 font-mono text-xs text-neon-blue animate-pulse">● AZC_LINK_ESTABLISHED</span>
+                                <span class="ml-4 font-mono text-xs text-neon-blue animate-pulse hidden md:inline">● AZC_LINK_ESTABLISHED</span>
                             </div>
                             <div class="text-right flex items-center gap-2">
                                 <i class="fas fa-wifi text-xs text-gray-500"></i>
@@ -679,7 +681,7 @@
                         <div class="flex-1 bg-black/40 relative z-0">
                              <!-- Loading Overlay (Fades out) -->
                              <div class="absolute inset-0 bg-black flex items-center justify-center pointer-events-none z-50 animate-fade-out-delay">
-                                <div class="font-mono text-neon-blue text-sm tracking-widest flex flex-col items-center">
+                                <div class="font-mono text-neon-blue text-xs md:text-sm tracking-widest flex flex-col items-center">
                                     <i class="fas fa-microchip text-4xl mb-4 animate-spin-slow"></i>
                                     INITIALIZING NEURAL PATHWAYS...
                                 </div>
@@ -688,7 +690,7 @@
                         </div>
 
                         <!-- Footer Credit -->
-                        <div class="bg-[#0f111a]/90 p-2 flex justify-between px-4 border-t border-white/10 text-[10px] font-mono text-gray-500">
+                        <div class="bg-[#0f111a]/90 p-2 flex justify-between px-4 border-t border-white/10 text-[10px] font-mono text-gray-500 hidden md:flex">
                             <span>ARCHITECT: ARAHANT SINGH</span>
                             <span>SESSION ID: 0X892-ALPHA</span>
                         </div>
@@ -698,19 +700,19 @@
         </section>
 
         <!-- PAGE: TEAM -->
-        <section id="team" class="page-section min-h-screen p-8 hidden">
+        <section id="team" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-5xl font-serif font-bold text-white mb-4">Research Unit</h2>
-                <p class="text-gray-400 mb-16 font-mono text-sm">CLASSIFICATION: TOP SECRET</p>
+                <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-4">Research Unit</h2>
+                <p class="text-gray-400 mb-12 md:mb-16 font-mono text-xs md:text-sm">CLASSIFICATION: TOP SECRET</p>
 
-                <div class="flex flex-wrap justify-center gap-8">
+                <div class="flex flex-wrap justify-center gap-6 md:gap-8">
                     <!-- Arahant -->
-                    <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-neon-purple/50 transition-all duration-300 group">
+                    <div class="w-full md:w-72 glass-panel p-6 md:p-8 rounded-2xl border border-white/5 hover:border-neon-purple/50 transition-all duration-300 group">
                         <div class="w-24 h-24 rounded-full border-2 border-neon-purple mx-auto mb-6 overflow-hidden">
                             <!-- [UPDATED IMAGE] -->
                             <img src="https://i.ibb.co/V0hgjxx5/WIN-20251107-17-37-14-Pro.jpg" class="w-full h-full object-cover" alt="Arahant">
                         </div>
-                        <h3 class="text-2xl font-bold text-white">Arahant Singh</h3>
+                        <h3 class="text-xl md:text-2xl font-bold text-white">Arahant Singh</h3>
                         <p class="text-neon-purple text-xs font-bold tracking-widest uppercase mb-4">Lead Developer & Architect</p>
                         <div class="bg-white/5 p-3 rounded text-left">
                             <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -720,12 +722,12 @@
                     </div>
 
                     <!-- Shreeya -->
-                    <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-neon-red/50 transition-all duration-300 group">
+                    <div class="w-full md:w-72 glass-panel p-6 md:p-8 rounded-2xl border border-white/5 hover:border-neon-red/50 transition-all duration-300 group">
                          <div class="w-24 h-24 rounded-full border-2 border-neon-red mx-auto mb-6 overflow-hidden">
                              <!-- [UPDATED IMAGE & NAME] -->
                             <img src="https://i.ibb.co/MxTvG2kS/image.png" class="w-full h-full object-cover" alt="Shreeya">
                         </div>
-                        <h3 class="text-2xl font-bold text-white">Shreeya Kakar</h3>
+                        <h3 class="text-xl md:text-2xl font-bold text-white">Shreeya Kakar</h3>
                         <p class="text-neon-red text-xs font-bold tracking-widest uppercase mb-4">Senior Analyst</p>
                         <div class="bg-white/5 p-3 rounded text-left">
                             <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -735,12 +737,12 @@
                     </div>
 
                      <!-- Aryaman -->
-                     <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-neon-blue/50 transition-all duration-300 group">
+                     <div class="w-full md:w-72 glass-panel p-6 md:p-8 rounded-2xl border border-white/5 hover:border-neon-blue/50 transition-all duration-300 group">
                         <div class="w-24 h-24 rounded-full border-2 border-neon-blue mx-auto mb-6 overflow-hidden">
                             <!-- [UPDATED IMAGE] -->
                            <img src="https://i.ibb.co/fYcmR2bD/image.png" class="w-full h-full object-cover" alt="Aryaman">
                        </div>
-                       <h3 class="text-2xl font-bold text-white">Aryaman Pathak</h3>
+                       <h3 class="text-xl md:text-2xl font-bold text-white">Aryaman Pathak</h3>
                        <p class="text-neon-blue text-xs font-bold tracking-widest uppercase mb-4">Economic Strategist</p>
                        <div class="bg-white/5 p-3 rounded text-left">
                            <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -750,12 +752,12 @@
                    </div>
 
                     <!-- Ridhi -->
-                    <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-neon-gold/50 transition-all duration-300 group">
+                    <div class="w-full md:w-72 glass-panel p-6 md:p-8 rounded-2xl border border-white/5 hover:border-neon-gold/50 transition-all duration-300 group">
                         <div class="w-24 h-24 rounded-full border-2 border-neon-gold mx-auto mb-6 overflow-hidden">
                            <!-- [UPDATED IMAGE] -->
                            <img src="https://i.ibb.co/tpn2jFBj/image.png" class="w-full h-full object-cover" alt="Ridhi">
                        </div>
-                       <h3 class="text-2xl font-bold text-white">Ridhi Goel</h3>
+                       <h3 class="text-xl md:text-2xl font-bold text-white">Ridhi Goel</h3>
                        <p class="text-neon-gold text-xs font-bold tracking-widest uppercase mb-4">Security Analyst</p>
                        <div class="bg-white/5 p-3 rounded text-left">
                            <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -765,12 +767,12 @@
                    </div>
 
                    <!-- Vineet -->
-                   <div class="w-72 glass-panel p-8 rounded-2xl border border-white/5 hover:border-green-500/50 transition-all duration-300 group">
+                   <div class="w-full md:w-72 glass-panel p-6 md:p-8 rounded-2xl border border-white/5 hover:border-green-500/50 transition-all duration-300 group">
                         <div class="w-24 h-24 rounded-full border-2 border-green-500 mx-auto mb-6 overflow-hidden">
                            <!-- [UPDATED IMAGE] -->
                            <img src="https://i.ibb.co/VcMKg5Mh/image.png" class="w-full h-full object-cover" alt="Vineet">
                        </div>
-                       <h3 class="text-2xl font-bold text-white">Vineet Mishra</h3>
+                       <h3 class="text-xl md:text-2xl font-bold text-white">Vineet Mishra</h3>
                        <p class="text-green-500 text-xs font-bold tracking-widest uppercase mb-4">Regional Specialist</p>
                        <div class="bg-white/5 p-3 rounded text-left">
                            <p class="text-[10px] text-gray-500 uppercase mb-1">Focus</p>
@@ -782,13 +784,13 @@
                 </div>
 
                 <!-- ACKNOWLEDGEMENT SECTION -->
-                <div class="mt-24 max-w-3xl mx-auto">
-                    <div class="glass-panel p-10 rounded-2xl border-t-4 border-neon-blue relative overflow-hidden shadow-2xl">
+                <div class="mt-12 md:mt-24 max-w-3xl mx-auto">
+                    <div class="glass-panel p-6 md:p-10 rounded-2xl border-t-4 border-neon-blue relative overflow-hidden shadow-2xl">
                         <div class="absolute top-0 right-0 p-6 opacity-10">
-                            <i class="fas fa-graduation-cap text-8xl text-white"></i>
+                            <i class="fas fa-graduation-cap text-6xl md:text-8xl text-white"></i>
                         </div>
-                        <h3 class="text-3xl font-serif font-bold text-white mb-6">Acknowledgement</h3>
-                        <p class="text-gray-300 text-lg leading-relaxed font-light italic">
+                        <h3 class="text-2xl md:text-3xl font-serif font-bold text-white mb-6">Acknowledgement</h3>
+                        <p class="text-gray-300 text-base md:text-lg leading-relaxed font-light italic">
                             "We want to thank our Principal, <span class="text-neon-blue font-bold not-italic">Mr. Anil Kumar</span>, who granted us this opportunity to present this project, our Vice-Principals who guided us, and our Political Science Teacher, <span class="text-neon-purple font-bold not-italic">Mrs. Swati Verma</span>, who guided us and helped us execute this project."
                         </p>
                     </div>
@@ -800,32 +802,32 @@
     </main>
 
     <!-- Detailed Modal Overlay -->
-    <div id="detail-modal" class="modal fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-4xl h-[80vh] rounded-2xl relative overflow-hidden flex flex-col md:flex-row shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10">
+    <div id="detail-modal" class="modal fixed inset-0 z-[60] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel w-full max-w-4xl min-h-[50vh] md:h-[80vh] rounded-2xl relative overflow-hidden flex flex-col md:flex-row shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 my-8 md:my-0">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-white hover:text-red-500 z-50 text-2xl transition-colors"><i class="fas fa-times"></i></button>
             
             <!-- Left: Flag & Stats -->
-            <div class="w-full md:w-1/3 bg-[#0a0c16] p-8 flex flex-col items-center text-center border-r border-white/5">
-                <img id="modal-flag" src="" class="w-32 h-auto shadow-2xl rounded mb-6 transform hover:scale-105 transition-transform" alt="Flag">
-                <h2 id="modal-title" class="text-3xl font-serif font-bold text-white mb-2">Country Name</h2>
-                <p id="modal-joined" class="text-neon-blue text-xs tracking-widest uppercase mb-6 font-mono">Joined 1967</p>
+            <div class="w-full md:w-1/3 bg-[#0a0c16] p-6 md:p-8 flex flex-col items-center text-center border-b md:border-b-0 md:border-r border-white/5">
+                <img id="modal-flag" src="" class="w-24 md:w-32 h-auto shadow-2xl rounded mb-4 md:mb-6 transform hover:scale-105 transition-transform" alt="Flag">
+                <h2 id="modal-title" class="text-2xl md:text-3xl font-serif font-bold text-white mb-2">Country Name</h2>
+                <p id="modal-joined" class="text-neon-blue text-xs tracking-widest uppercase mb-4 md:mb-6 font-mono">Joined 1967</p>
                 
                 <div class="w-full mt-auto">
                     <div class="bg-white/5 p-3 rounded mb-2">
                         <p class="text-[10px] text-gray-500 uppercase">Research By</p>
-                        <p id="modal-student" class="text-white font-bold">Student Name</p>
+                        <p id="modal-student" class="text-white font-bold text-sm">Student Name</p>
                     </div>
                 </div>
             </div>
 
             <!-- Right: Details Content -->
-            <div class="w-full md:w-2/3 p-8 overflow-y-auto bg-gradient-to-br from-[#0f111a] to-[#050510]">
-                <div class="mb-8">
+            <div class="w-full md:w-2/3 p-6 md:p-8 overflow-y-auto bg-gradient-to-br from-[#0f111a] to-[#050510]">
+                <div class="mb-6 md:mb-8">
                     <h3 class="text-lg font-bold text-white mb-2 border-b border-white/10 pb-2">Overview</h3>
                     <p id="modal-desc" class="text-gray-300 text-sm leading-relaxed">Description goes here.</p>
                 </div>
                 
-                <div class="grid grid-cols-1 gap-6">
+                <div class="grid grid-cols-1 gap-4 md:gap-6">
                     <div class="bg-blue-500/5 p-4 rounded border border-blue-500/10">
                         <h4 class="text-blue-400 font-bold text-sm mb-2 uppercase flex items-center gap-2"><i class="fas fa-landmark"></i> Political & Economic</h4>
                         <p id="modal-pol" class="text-gray-400 text-xs leading-relaxed">Data loading...</p>
@@ -1156,6 +1158,22 @@
             document.getElementById('detail-modal').classList.remove('open');
         }
 
+        // Mobile Menu Toggle Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('nav-menu');
+            const icon = document.getElementById('menu-icon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
         // --- NEW AI TYPEWRITER & LOGIC ---
         let aiIntroTimeout;
         let logInterval;
@@ -1223,6 +1241,12 @@
                 btn.classList.remove('nav-active');
             });
             document.getElementById('nav-' + pageId).classList.add('nav-active');
+
+            // Close mobile menu if open
+            const menu = document.getElementById('nav-menu');
+            if (!menu.classList.contains('hidden')) {
+                toggleMobileMenu();
+            }
 
             // Handle AI Logic
             const introLayer = document.getElementById('ai-intro-layer');
