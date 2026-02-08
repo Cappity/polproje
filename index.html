@@ -162,17 +162,20 @@
             top: 50%;
             left: 50%;
             width: 100vw;
-            height: 100vh;
-            transform: translate(-50%, -50%) scale(1.3);
+            height: 100vh; /* Ensures full cover */
+            transform: translate(-50%, -50%) scale(1.3); /* Scale up to prevent black bars */
             pointer-events: none;
         }
         
-        /* Mobile Video Fix */
-        @media (max-width: 768px) {
+        /* Specific Aspect Ratio Fix for Embedded Video */
+        @media (min-aspect-ratio: 16/9) {
             .video-docker iframe {
-                width: 300%; 
-                height: 100%;
-                transform: translate(-50%, -50%) scale(1);
+                height: 56.25vw;
+            }
+        }
+        @media (max-aspect-ratio: 16/9) {
+            .video-docker iframe {
+                width: 177.78vh;
             }
         }
 
@@ -245,6 +248,9 @@
             </button>
             <button onclick="switchPage('members')" id="nav-members" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
                 <i class="fas fa-flag w-5 group-hover:text-neon-purple transition-colors"></i> <span class="font-medium tracking-wide">Member Dossiers</span>
+            </button>
+            <button onclick="switchPage('impact')" id="nav-impact" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
+                <i class="fas fa-star w-5 group-hover:text-yellow-400 transition-colors"></i> <span class="font-medium tracking-wide">Impact & Pillars</span>
             </button>
             <button onclick="switchPage('tourism')" id="nav-tourism" class="nav-item w-full text-left p-3 rounded hover:bg-white/5 transition-all flex items-center gap-4 text-gray-400 group">
                 <i class="fas fa-plane w-5 group-hover:text-orange-400 transition-colors"></i> <span class="font-medium tracking-wide">Travel & Culture</span>
@@ -333,37 +339,148 @@
                     </div>
                 </div>
 
-                <!-- ASEAN ACHIEVEMENTS -->
-                <div class="mb-12 md:mb-16">
-                    <h2 class="text-2xl md:text-3xl font-serif text-white mb-6 md:mb-8 border-l-4 border-neon-gold pl-4">ASEAN Achievements</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-gold transition-colors">
-                            <i class="fas fa-dove text-neon-gold text-2xl mb-4"></i>
-                            <h3 class="text-xl font-bold text-white mb-2">Regional Peace</h3>
-                            <p class="text-gray-400 text-sm">Successfully prevented major interstate conflict for 50+ years through the Treaty of Amity and Cooperation (TAC) and ZOPFAN.</p>
-                        </div>
-                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-blue transition-colors">
-                            <i class="fas fa-globe text-neon-blue text-2xl mb-4"></i>
-                            <h3 class="text-xl font-bold text-white mb-2">Global Centrality</h3>
-                            <p class="text-gray-400 text-sm">Established itself as the primary convener of world powers through forums like the East Asia Summit (EAS) and ARF.</p>
-                        </div>
-                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-purple transition-colors">
-                            <i class="fas fa-chart-line text-neon-purple text-2xl mb-4"></i>
-                            <h3 class="text-xl font-bold text-white mb-2">Economic Integration</h3>
-                            <p class="text-gray-400 text-sm">Eliminated tariffs on 98% of goods (ATIGA) and spearheaded the RCEP, creating the world's largest free trade area.</p>
+                <!-- WHAT IS ASEAN -->
+                <div class="mb-16 md:flex md:gap-12 items-center">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-6 border-l-4 border-neon-blue pl-6">What is ASEAN?</h2>
+                        <p class="text-gray-300 text-lg leading-relaxed mb-6">
+                            The <span class="text-neon-blue font-bold">Association of Southeast Asian Nations</span> is a political and economic union of 11 member states in Southeast Asia. Established in 1967, it promotes intergovernmental cooperation and facilitates economic, political, security, military, educational, and sociocultural integration between its members and other countries in the Asia-Pacific.
+                        </p>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            Acting as a central node in the Indo-Pacific architecture ("ASEAN Centrality"), the bloc navigates the complex relationships between major global powers while fostering regional peace and stability.
+                        </p>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="glass-panel p-2 rounded-2xl relative">
+                            <img src="https://images.unsplash.com/photo-1552835203-b09e2eb42a03?q=80&w=1200&auto=format&fit=crop" class="rounded-xl w-full h-auto opacity-80 hover:opacity-100 transition-opacity" alt="ASEAN Meeting">
+                            <div class="absolute -bottom-4 -right-4 bg-neon-red/10 border border-neon-red backdrop-blur-md px-6 py-4 rounded-xl">
+                                <span class="text-neon-red font-bold text-2xl">One Vision.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ASEAN COMMUNITIES -->
+                <!-- TIMELINE -->
+                <div class="mb-16">
+                    <h2 class="text-3xl font-serif text-center text-white mb-12">Historical Evolution</h2>
+                    <div class="relative border-l-2 border-white/10 ml-6 md:mx-auto md:max-w-4xl space-y-12 pb-12">
+                        
+                        <!-- 1967 -->
+                        <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="md:text-right hidden md:block">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-neon-gold/50 transition-colors">1967</span>
+                            </div>
+                            <div class="absolute left-[-5px] top-2 w-3 h-3 bg-neon-gold rounded-full shadow-[0_0_10px_rgba(255,215,0,0.8)]"></div>
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-neon-gold/30 transition-all">
+                                <h3 class="text-xl font-bold text-neon-gold mb-1">Bangkok Declaration</h3>
+                                <p class="text-sm text-gray-400">The Founding Fathers (Indonesia, Malaysia, Philippines, Singapore, Thailand) sign the document establishing ASEAN to promote stability.</p>
+                            </div>
+                        </div>
+
+                        <!-- 1976 -->
+                        <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-neon-blue/30 transition-all order-1 md:text-right">
+                                <h3 class="text-xl font-bold text-neon-blue mb-1">Treaty of Amity</h3>
+                                <p class="text-sm text-gray-400">Adoption of the Treaty of Amity and Cooperation (TAC), establishing the fundamental principles of non-interference and peaceful settlement of disputes.</p>
+                            </div>
+                            <div class="absolute left-[-5px] md:left-auto md:right-auto md:left-1/2 md:-translate-x-[6.5px] top-2 w-3 h-3 bg-neon-blue rounded-full shadow-[0_0_10px_rgba(0,243,255,0.8)]"></div>
+                            <div class="hidden md:block pl-12">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-neon-blue/50 transition-colors">1976</span>
+                            </div>
+                        </div>
+
+                        <!-- 1990s -->
+                        <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="md:text-right hidden md:block">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-neon-purple/50 transition-colors">1990s</span>
+                            </div>
+                            <div class="absolute left-[-5px] md:left-1/2 md:-translate-x-[6.5px] top-2 w-3 h-3 bg-neon-purple rounded-full"></div>
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-neon-purple/30 transition-all">
+                                <h3 class="text-xl font-bold text-neon-purple mb-1">Expansion Era</h3>
+                                <p class="text-sm text-gray-400">Brunei (1984), followed by Vietnam (1995), Laos & Myanmar (1997), and Cambodia (1999) join, completing the ASEAN-10.</p>
+                            </div>
+                        </div>
+
+                        <!-- 2008 -->
+                        <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-neon-red/30 transition-all order-1 md:text-right">
+                                <h3 class="text-xl font-bold text-neon-red mb-1">ASEAN Charter</h3>
+                                <p class="text-sm text-gray-400">ASEAN becomes a legal entity with a codified structure, flag, and anthem, moving towards a rules-based organization.</p>
+                            </div>
+                            <div class="absolute left-[-5px] md:left-1/2 md:-translate-x-[6.5px] top-2 w-3 h-3 bg-neon-red rounded-full"></div>
+                            <div class="hidden md:block pl-12">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-neon-red/50 transition-colors">2008</span>
+                            </div>
+                        </div>
+
+                        <!-- 2015 -->
+                        <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="md:text-right hidden md:block">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-white/50 transition-colors">2015</span>
+                            </div>
+                            <div class="absolute left-[-5px] md:left-1/2 md:-translate-x-[6.5px] top-2 w-3 h-3 bg-white rounded-full"></div>
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-white/30 transition-all">
+                                <h3 class="text-xl font-bold text-white mb-1">ASEAN Community</h3>
+                                <p class="text-sm text-gray-400">Formal establishment of the ASEAN Community based on three pillars: Political-Security, Economic, and Socio-Cultural.</p>
+                            </div>
+                        </div>
+
+                         <!-- 2025 -->
+                         <div class="relative pl-12 md:pl-0 md:grid md:grid-cols-2 md:gap-12 items-center group">
+                            <div class="glass-panel p-6 rounded-xl border border-white/5 group-hover:border-neon-gold/30 transition-all order-1 md:text-right">
+                                <h3 class="text-xl font-bold text-neon-gold mb-1">The 11th Member</h3>
+                                <p class="text-sm text-gray-400">Timor-Leste is officially admitted as the 11th member of ASEAN, marking a historic expansion.</p>
+                            </div>
+                            <div class="absolute left-[-5px] md:left-1/2 md:-translate-x-[6.5px] top-2 w-3 h-3 bg-neon-gold rounded-full"></div>
+                            <div class="hidden md:block pl-12">
+                                <span class="text-6xl font-bold text-white/10 group-hover:text-neon-gold/50 transition-colors">2025</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW PAGE: IMPACT & PILLARS -->
+        <section id="impact" class="page-section min-h-screen p-4 md:p-8 hidden">
+            <div class="max-w-7xl mx-auto">
+                <header class="mb-12 text-center">
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Structure & Impact</h2>
+                    <p class="text-gray-400 font-mono text-sm">THE FOUNDATION OF REGIONAL COOPERATION</p>
+                </header>
+
+                <!-- ASEAN ACHIEVEMENTS (Moved from Home) -->
+                <div class="mb-16">
+                    <h2 class="text-3xl font-serif text-white mb-8 border-l-4 border-neon-gold pl-4">Key Achievements</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-gold transition-colors">
+                            <i class="fas fa-dove text-neon-gold text-4xl mb-6"></i>
+                            <h3 class="text-xl font-bold text-white mb-2">Regional Peace</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Successfully prevented major interstate conflict for 50+ years through the Treaty of Amity and Cooperation (TAC) and ZOPFAN (Zone of Peace, Freedom and Neutrality).</p>
+                        </div>
+                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-blue transition-colors">
+                            <i class="fas fa-globe text-neon-blue text-4xl mb-6"></i>
+                            <h3 class="text-xl font-bold text-white mb-2">Global Centrality</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Established itself as the primary convener of world powers through forums like the East Asia Summit (EAS) and ARF, balancing influence between the US and China.</p>
+                        </div>
+                        <div class="glass-panel p-6 rounded-2xl group hover:border-neon-purple transition-colors">
+                            <i class="fas fa-chart-line text-neon-purple text-4xl mb-6"></i>
+                            <h3 class="text-xl font-bold text-white mb-2">Economic Integration</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Eliminated tariffs on 98% of goods (ATIGA) and spearheaded the RCEP, creating the world's largest free trade area covering 30% of global GDP.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ASEAN COMMUNITIES (Moved from Home) -->
                 <div class="mb-12">
-                    <h2 class="text-2xl font-serif text-white mb-6 md:mb-8 border-l-4 border-neon-blue pl-4">ASEAN Communities (The 3 Pillars)</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    <h2 class="text-2xl font-serif text-white mb-8 border-l-4 border-neon-blue pl-4">The Three Community Pillars</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <!-- Security -->
                         <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group hover:-translate-y-2 transition-transform duration-500">
                             <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl group-hover:bg-blue-500/30 transition-colors"></div>
                             <h3 class="text-xl font-bold text-blue-400 mb-4">Political-Security</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Ensuring peace through ZOPFAN (Zone of Peace, Freedom and Neutrality). Focuses on conflict prevention and non-interference.</p>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Ensuring peace through ZOPFAN. Focuses on conflict prevention, maritime security, and non-interference in domestic affairs.</p>
                             <span class="text-[10px] font-mono border border-blue-500/30 px-2 py-1 rounded text-blue-300">APSC BLUEPRINT</span>
                         </div>
                         <!-- Economic -->
@@ -377,7 +494,7 @@
                         <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group hover:-translate-y-2 transition-transform duration-500">
                             <div class="absolute -right-10 -top-10 w-32 h-32 bg-yellow-500/20 rounded-full blur-2xl group-hover:bg-yellow-500/30 transition-colors"></div>
                             <h3 class="text-xl font-bold text-yellow-400 mb-4">Socio-Cultural</h3>
-                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Forging a common identity. Focuses on education, environment, disaster management, and human rights protection.</p>
+                            <p class="text-gray-400 text-sm leading-relaxed mb-6">Forging a common identity. Focuses on education, environment, disaster management, human rights, and social welfare.</p>
                             <span class="text-[10px] font-mono border border-yellow-500/30 px-2 py-1 rounded text-yellow-300">ASCC BLUEPRINT</span>
                         </div>
                     </div>
@@ -388,10 +505,10 @@
         <!-- PAGE: MEMBERS -->
         <section id="members" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-7xl mx-auto">
-                <header class="mb-8 md:mb-12 flex flex-col md:flex-row md:justify-between md:items-end border-b border-white/10 pb-6">
+                <header class="mb-12 flex justify-between items-end border-b border-white/10 pb-6">
                     <div>
-                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-2">Member Dossiers</h2>
-                        <p class="text-gray-400 font-mono text-xs md:text-sm">SELECT A NATION TO ACCESS CLASSIFIED DATA</p>
+                        <h2 class="text-4xl font-serif font-bold text-white mb-2">Member Dossiers</h2>
+                        <p class="text-gray-400 font-mono text-sm">SELECT A NATION TO ACCESS CLASSIFIED DATA</p>
                     </div>
                 </header>
 
@@ -702,6 +819,20 @@
         <!-- PAGE: TEAM -->
         <section id="team" class="page-section min-h-screen p-4 md:p-8 hidden">
             <div class="max-w-6xl mx-auto text-center">
+                
+                <!-- ACKNOWLEDGEMENT SECTION (MOVED TO TOP) -->
+                <div class="mb-16 md:mb-20 max-w-4xl mx-auto">
+                    <div class="glass-panel p-8 md:p-12 rounded-2xl border-t-4 border-neon-blue relative overflow-hidden shadow-2xl">
+                        <div class="absolute top-0 right-0 p-6 opacity-10">
+                            <i class="fas fa-graduation-cap text-6xl md:text-9xl text-white"></i>
+                        </div>
+                        <h3 class="text-3xl md:text-5xl font-serif font-bold text-white mb-8">Acknowledgement</h3>
+                        <p class="text-gray-300 text-lg md:text-2xl leading-relaxed font-light italic">
+                            "We want to thank our Principal, <span class="text-neon-blue font-bold not-italic">Mr. Anil Kumar</span>, who granted us this opportunity to present this project, our Vice-Principals who guided us, and our Political Science Teacher, <span class="text-neon-purple font-bold not-italic">Mrs. Swati Verma</span>, who guided us and helped us execute this project."
+                        </p>
+                    </div>
+                </div>
+
                 <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-4">Research Unit</h2>
                 <p class="text-gray-400 mb-12 md:mb-16 font-mono text-xs md:text-sm">CLASSIFICATION: TOP SECRET</p>
 
@@ -782,20 +913,6 @@
                    </div>
 
                 </div>
-
-                <!-- ACKNOWLEDGEMENT SECTION -->
-                <div class="mt-12 md:mt-24 max-w-3xl mx-auto">
-                    <div class="glass-panel p-6 md:p-10 rounded-2xl border-t-4 border-neon-blue relative overflow-hidden shadow-2xl">
-                        <div class="absolute top-0 right-0 p-6 opacity-10">
-                            <i class="fas fa-graduation-cap text-6xl md:text-8xl text-white"></i>
-                        </div>
-                        <h3 class="text-2xl md:text-3xl font-serif font-bold text-white mb-6">Acknowledgement</h3>
-                        <p class="text-gray-300 text-base md:text-lg leading-relaxed font-light italic">
-                            "We want to thank our Principal, <span class="text-neon-blue font-bold not-italic">Mr. Anil Kumar</span>, who granted us this opportunity to present this project, our Vice-Principals who guided us, and our Political Science Teacher, <span class="text-neon-purple font-bold not-italic">Mrs. Swati Verma</span>, who guided us and helped us execute this project."
-                        </p>
-                    </div>
-                </div>
-
             </div>
         </section>
 
